@@ -65,4 +65,5 @@ public class UsersController {
         log.info("OK returning user {}",user);
         return ResponseEntity.ok(user);
     }
+
 }

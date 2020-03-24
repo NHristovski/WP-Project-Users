@@ -10,10 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,8 +23,9 @@ public class UsersController {
     private final ConversionService conversionService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@Valid RegisterRequest registerRequest) {
+    public ResponseEntity register(@Valid @RequestBody RegisterRequest registerRequest) {
 
+        log.info("In register");
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())){
             throw new FailedToCreateUserException("Failed to create user. Message: Passwords do not match");
         }
@@ -62,9 +60,9 @@ public class UsersController {
         user.setEmail(applicationUser.getEmail());
         user.setName(applicationUser.getName());
         user.setUsername(applicationUser.getUsername());
-        user.setPassword("");
+        user.setPassword(applicationUser.getPassword());
 
-        log.info("OK returning user");
+        log.info("OK returning user {}",user);
         return ResponseEntity.ok(user);
     }
 }
